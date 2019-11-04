@@ -2,6 +2,8 @@
 
 Makes filenames downloaded from sharing services more readable.
 
+[![asciicast](https://asciinema.org/a/279096.svg)](https://asciinema.org/a/279096)
+
 ## Install
 ```sh
 $ wget https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py

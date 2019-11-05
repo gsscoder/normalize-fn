@@ -10,7 +10,7 @@ import time
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 script_name = os.path.basename(__file__)
 __version__ = '0.1.0'
-acaronyms_re_langs =(
+acaronyms_re_langs = (
         r'\b(AAR|AA|ABK|AB|AFR|AF|AKA|AK|ALB|SQ|AMH|AM|ARA|AR|ARG|AN|ARM|'
         r'HY|ASM|AS|AVA|AV|AVE|AE|AYM|AY|AZE|AZ|BAK|BA|BAM|BM|BAQ|EU|BEL|'
         r'BE|BEN|BN|BIH|BH|BIS|BI|BOS|BS|BRE|BR|BUL|BG|BUR|MY|CAT|CA|CHA|'
@@ -25,7 +25,7 @@ acaronyms_re_langs =(
         r'LB|LUB|LU|LUG|LG|MAC|MK|MAH|MH|MAL|ML|MAO|MI|MAR|MR|MAY|MS|MLG|'
         r'MG|MLT|MT|MON|MN|NAU|NA|NAV|NV|NBL|NR|NDE|ND|NDO|NG|NEP|NE|NNO|'
         r'NN|NOB|NB|NOR|NO|NYA|NY|OCI|OC|OJI|OJ|ORI|OR|ORM|OM|OSS|OS|PAN|'
-        r'PA|PER|FA|PLI|PI|POL|PL|POR|PT|PUS|PS|QUE|QU|ROH|RM|RUM|RO|RUN|'
+        r'PA|PLI|PI|POL|PL|POR|PT|PUS|PS|QUE|QU|ROH|RM|RUM|RO|RUN|'
         r'RN|RUS|RU|SAG|SG|SIN|SI|SLO|SK|SLV|SL|SME|SE|SMO|SM|SNA|'
         r'SN|SND|SD|SOM|SO|SOT|ST|SPA|ES|SRD|SC|SRP|SR|SSW|SS|SUN|SU|SWA|'
         r'SW|SWE|SV|TAH|TY|TAM|TA|TAT|TT|TEL|TE|TGK|TG|TGL|TL|THA|TH|TIB|'
@@ -65,7 +65,7 @@ def get_acronyms_re(langs):
         r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|'
         r'DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|WEBRip|HDTV|HDTS|PDTV|'
         r'SATRip|SAT RIP|DVBRip|DVDRip|DRip|DVB-S|DTTRip|TVRip|TV TIP|WP|SCREENER|'
-        r'HQ|TV|RIP|'
+        r'HQ|TV|RIP|SUBS|1080p|'
         r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
         r'H 264|HD|HD 720|DivX|XviD|x264|x265|')
     acronyms_re_end = \

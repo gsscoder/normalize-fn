@@ -100,6 +100,10 @@ def shorten(filename):
 
 def print_preview(normalized):
     preview = normalized[:10]
+    total = len(normalized) 
+
+    if len(normalized) > 10:
+        print(f'Operations on first 10 files on a total of {total}:')
 
     for oldname, newname in preview:
         print(f'{shorten(oldname)} -> {newname}')

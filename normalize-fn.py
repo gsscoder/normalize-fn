@@ -152,6 +152,14 @@ def try_rename(oldname, newname):
         return False
 
 
+def exit_and_hints(target_dir, args):
+    message = f'{script_name}: {target_dir}: contains no filenames to normalize'
+    if not args.remove_langs:
+        message += '\nPlease try with --remove-langs option.'
+    if not args.remove_noise:
+        message += '\nPlease try with --remove-noise option.'
+    sys.exit(message)
+
 def main():
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \
@@ -204,9 +212,7 @@ def main():
 
     file_count = len(normalized)
     if file_count == 0:
-        print(f'{script_name}: {target_dir}: contains no filenames to normalize')
-        sys.exit('Please try with --remove-langs and/or --remove-noise options.')
-
+        exit_and_hints(target_dir, args)
 
     proceed = True
     if not args.force:

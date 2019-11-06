@@ -67,9 +67,9 @@ def get_acronyms_re(langs):
         r'SATRip|SAT RIP|DVBRip|DVDRip|DRip|DVB-S|DTTRip|TVRip|TV TIP|WP|SCREENER|'
         r'HQ|TV|RIP|SUBS|1080p|HEVC|'
         r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
-        r'H 264|HD|HD 720|DivX|XviD|x264|x265|')
+        r'H 264|HD|HD 720|DivX|XviD|x264|x265)|')
     acronyms_re_end = \
-        r')(?:(?=)|$)'
+        r'(?:(?=)|$)'
 
     if langs:
         return acronyms_re_begin + acaronyms_re_langs + acronyms_re_end

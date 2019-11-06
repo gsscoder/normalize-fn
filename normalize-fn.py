@@ -76,7 +76,7 @@ def get_acronyms_re(langs):
     return acronyms_re_begin + acronyms_re_end
 
 
-def normalize(filename, acronyms_re):
+def normalize(filename, acronyms_re, remove_noise):
     basename, ext = itemgetter(0,1)(os.path.splitext(filename))
     
     # Turn dots to spaces
@@ -86,6 +86,9 @@ def normalize(filename, acronyms_re):
     basename = re.sub(r'(\[).+?(\])', '', basename)
     # Remove acronyms
     basename = acronyms_re.sub('', basename)
+     # Remove noise
+    if remove_noise:
+        basename = re.sub(r'(.)\1{3,}', '', basename)
     # Remove exceeding spaces
     basename = ' '.join(basename.split())
 
@@ -168,6 +171,9 @@ def main():
     parser.add_argument('--remove-langs', '-l',
                         action='store_true',  dest='remove_langs', default=False,
                         help='remove language codes from filename')
+    parser.add_argument('--remove-noise', '-n',
+                        action='store_true', dest='remove_noise', default=False,
+                        help='remove excess char repetition')
     parser.add_argument('directory',
                         nargs='?', metavar='DIRECTORY',
                         action='store',
@@ -190,14 +196,17 @@ def main():
 
     # Normalize excluding hidden files
     acronyms_re = re.compile(get_acronyms_re(args.remove_langs), re.IGNORECASE)
-    normalized = [(f, normalize(f, acronyms_re)) for f in files if not is_hidden(os.path.join(target_dir, f))]
+    normalized = [(f, normalize(f, acronyms_re, args.remove_noise)) \
+                    for f in files if not is_hidden(os.path.join(target_dir, f))]
 
     # Remove files that don't need rename
     normalized = [(oldname, newname) for oldname, newname in normalized if oldname != newname]
 
     file_count = len(normalized)
     if file_count == 0:
-        sys.exit(f'{script_name}: {target_dir}: contains no filenames to normalize')
+        print(f'{script_name}: {target_dir}: contains no filenames to normalize')
+        sys.exit('Please try with --remove-langs and/or --remove-noise options.')
+
 
     proceed = True
     if not args.force:

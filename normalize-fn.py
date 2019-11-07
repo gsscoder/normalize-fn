@@ -23,12 +23,17 @@ def get_acronyms_re(args, config):
         r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
         r'H 264|HD|HD 720|DivX|XviD|x264|x265)|')
 
+    config_acronyms = []
+
     if args.remove_langs and config != None:
-        acronyms += r'\b('
-        acronyms += '|'.join(config['lang.codes'])
-        acronyms += '|'
-        acronyms += '|'.join(config['lang.descs'])
-        acronyms += r')\b'
+        config_acronyms.extend(config['lang.codes'])
+        config_acronyms.extend(config['lang.descs'])
+
+    if args.remove_noise and config != None:
+        config_acronyms.extend(config['extra.acronyms'])
+
+    if len(config_acronyms) > 0:
+        acronyms += r'\b(' + '|'.join(config_acronyms) + r')\b'
 
     return acronyms + r'(?:(?=)|$)'
 

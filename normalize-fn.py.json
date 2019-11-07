@@ -45,5 +45,5 @@
         "TIGRINYA", "TONGA", "TSWANA", "TSONGA", "TURKMEN", "TURKISH", "TWI", "UIGHUR", "UYGHUR", "UKRAINIAN",
         "URDU", "UZBEK", "VENDA", "VIETNAMESE", "WELSH", "WALLOON", "WOLOF", "XHOSA", "YIDDISH", "YORUBA",
         "ZHUANG", "CHUANG", "ZULU"],
-    "extra.acronyms": ["ITAL"]
+    "extra.acronyms": ["ITAL", "GENiSYS"]
 }

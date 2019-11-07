@@ -63,7 +63,7 @@ acaronyms_re_langs = (
 def get_acronyms_re(langs, config):
     acronyms = (
         r'(?:^|(?<=))('
-        r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|'
+        r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|WEBMux|'
         r'DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|WEBRip|WEB-RIP|HDTV|HDTS|PDTV|'
         r'SATRip|SAT RIP|DVBRip|DVDRip|DRip|DVB-S|DTTRip|TVRip|TV TIP|WP|SCREENER|'
         r'HQ|TV|RIP|SUBS|1080p|HEVC|'

@@ -5,6 +5,7 @@ import sys
 import os
 import re
 import time
+import json
 
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
@@ -59,8 +60,8 @@ acaronyms_re_langs = (
         r'ZHUANG|CHUANG|ZULU)\b')
 
 
-def get_acronyms_re(langs):
-    acronyms_re_begin = (
+def get_acronyms_re(langs, config):
+    acronyms = (
         r'(?:^|(?<=))('
         r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|'
         r'DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|WEBRip|WEB-RIP|HDTV|HDTS|PDTV|'
@@ -68,12 +69,15 @@ def get_acronyms_re(langs):
         r'HQ|TV|RIP|SUBS|1080p|HEVC|'
         r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
         r'H 264|HD|HD 720|DivX|XviD|x264|x265)|')
-    acronyms_re_end = \
-        r'(?:(?=)|$)'
 
-    if langs:
-        return acronyms_re_begin + acaronyms_re_langs + acronyms_re_end
-    return acronyms_re_begin + acronyms_re_end
+    if langs and config != None:
+        acronyms += r'\b('
+        acronyms += '|'.join(config['lang.codes'])
+        acronyms += '|'
+        acronyms += '|'.join(config['lang.descs'])
+        acronyms += r')\b'
+
+    return acronyms + r'(?:(?=)|$)'
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -93,6 +97,13 @@ def normalize(filename, acronyms_re, remove_noise):
     basename = ' '.join(basename.split())
 
     return f'{basename}{ext}'
+
+
+def load_config():
+    try:
+        return json.loads(open(f'{script_name}.json').read())
+    except:
+        return None
 
 
 def shorten(filename):
@@ -203,7 +214,7 @@ def main():
         files = [f for f in files if not is_subtitle(f)]
 
     # Normalize excluding hidden files
-    acronyms_re = re.compile(get_acronyms_re(args.remove_langs), re.IGNORECASE)
+    acronyms_re = re.compile(get_acronyms_re(args.remove_langs, load_config()), re.IGNORECASE)
     normalized = [(f, normalize(f, acronyms_re, args.remove_noise)) \
                     for f in files if not is_hidden(os.path.join(target_dir, f))]
 

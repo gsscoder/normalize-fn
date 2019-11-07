@@ -16,10 +16,10 @@ __version__ = '0.1.0'
 def get_acronyms_re(args, config):
     acronyms = (
         r'(?:^|(?<=))('
-        r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|WEBMux|'
+        r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|WEBMux|DLMux|'
         r'DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|WEBRip|WEB-RIP|HDTV|HDTS|PDTV|'
         r'SATRip|SAT RIP|DVBRip|DVDRip|DRip|DVB-S|DTTRip|TVRip|TV TIP|WP|SCREENER|'
-        r'HQ|TV|RIP|SUBS|1080p|HEVC|'
+        r'HQ|TV|RIP|SUBS|1080p|HEVC|720p|'
         r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
         r'H 264|HD|HD 720|DivX|XviD|x264|x265)|')
 
@@ -124,7 +124,8 @@ def try_rename(oldname, newname):
 
 
 def exit_and_hints(target_dir, args):
-    message = f'{script_name}: {target_dir}: contains no filenames to normalize'
+    message = f'{script_name}: {target_dir}: contains no filenames to normalize\n' + \
+        'Try to edit \'extra.acronyms\' in {script_name}.json.'
     if not args.remove_langs:
         message += '\nPlease try with --remove-langs option.'
     if not args.remove_noise:

@@ -2,7 +2,7 @@
 
 Makes filenames downloaded from sharing services more readable.
 
-[![asciicast](https://asciinema.org/a/279096.svg)](https://asciinema.org/a/279096)
+[![asciicast](https://asciinema.org/a/279934.svg)](https://asciinema.org/a/279934)
 
 ## Install
 ```sh

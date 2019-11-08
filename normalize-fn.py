@@ -132,6 +132,16 @@ def exit_and_hints(target_dir, args):
         message += '\nPlease try with --remove-noise option.'
     sys.exit(message)
 
+
+def update_progess(actual, step, perc_text):
+    completed = round(actual + step)
+    completed = 32 if completed > 32 else completed
+    full = ' ' * completed
+    empty = ' ' * (32 - completed)
+    print('     |\x1b[6;30;47m' + full + '\x1b[0m' + empty + '| ' + \
+        perc_text, end="\r", flush=True)
+
+
 def main():
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \
@@ -193,21 +203,21 @@ def main():
 
     if proceed:
         print(f'Renaming into \'{target_dir}\'...')
-        print(f'Renaming files 0% 0/{file_count}', end="\r", flush=True)
-
+ 
         completed = 0
-        step_perc = 100 / file_count
+        step_perc = 32 / file_count
         failed = []
 
+        update_progess(0, step_perc, f'0%/{file_count}')
         for n, (oldname, newname) in enumerate(normalized):
             time.sleep(0.1)
             if not try_rename(os.path.join(target_dir, oldname), os.path.join(target_dir, newname)):
                 failed.append(oldname)
 
             completed += step_perc
-            print(f'Renaming files {int(completed)}% {n + 1}/{file_count}', end='\r', flush=True)       
+            update_progess(completed, step_perc, f'{int(completed)}% {n + 1}/{file_count}')     
 
-        print(f'Renaming files 100% {n + 1}/{file_count}, done.', end='\r', flush=True)
+        update_progess(100, step_perc, f'100% {n + 1}/{file_count}, done.')
         print('')
 
         if len(failed) > 0:

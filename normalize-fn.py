@@ -50,9 +50,12 @@ def normalize(filename, acronyms_re, remove_noise):
     basename = acronyms_re.sub('', basename)
      # Remove noise
     if remove_noise:
+        # Remove chars repeated more than 3 times
         basename = re.sub(r'(.)\1{3,}', '', basename)
         # Remove beginning and trailing dashes 
         basename = re.sub(r'^(-)|(-)$', '', basename)
+        # Remove underscores
+        basename = basename.replace('_', '')
     # Remove exceeding spaces
     basename = ' '.join(basename.split())
 

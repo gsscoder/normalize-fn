@@ -136,13 +136,27 @@ def exit_and_hints(target_dir, args):
     sys.exit(message)
 
 
+def supports_color():
+    # Ripped from: https://github.com/django/django/blob/master/django/core/management/color.py#L12
+
+    plat = sys.platform
+    supported_platform = plat != 'Pocket PC' and (plat != 'win32' or 'ANSICON' in os.environ)
+
+    # isatty is not always implemented, #6223.
+    is_a_tty = hasattr(sys.stdout, 'isatty') and sys.stdout.isatty()
+    return supported_platform and is_a_tty
+
+
 def update_progess(actual, step, perc_text):
     completed = round(actual + step)
     completed = 32 if completed > 32 else completed
-    full = ' ' * completed
+    full = ' ' * completed if supports_color() else \
+        '#' * completed
     empty = ' ' * (32 - completed)
-    print('     |\x1b[6;30;47m' + full + '\x1b[0m' + empty + '| ' + \
-        perc_text, end="\r", flush=True)
+    bar = '     |\x1b[6;30;47m' + full + '\x1b[0m' + empty + '| ' \
+        if supports_color() else \
+            '     |' + full + empty + '| '
+    print(bar + perc_text, end="\r", flush=True)
 
 
 def main():

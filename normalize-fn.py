@@ -184,7 +184,7 @@ def main():
                         help='remove language codes from filename')
     parser.add_argument('--remove-noise', '-n',
                         action='store_true', dest='remove_noise', default=False,
-                        help='remove excess char repetition')
+                        help='remove excess chars repetition')
     parser.add_argument('directory',
                         nargs='?', metavar='DIRECTORY',
                         action='store',

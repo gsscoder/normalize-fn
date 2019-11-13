@@ -2,7 +2,7 @@
 
 Makes filenames downloaded from sharing services more readable.
 
-[![asciicast](https://asciinema.org/a/279934.svg)](https://asciinema.org/a/279934)
+[![asciicast](https://asciinema.org/a/280952.svg)](https://asciinema.org/a/280952)
 
 ## Install
 ```sh
@@ -13,7 +13,7 @@ $ wget https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-
 ```sh
 $ python3 normalize-fn.py --help
 usage: normalize-fn.py [-h] [--version] [--force] [--skip-subtitle]
-                       [--remove-langs]
+                       [--remove-langs] [--remove-noise]
                        [DIRECTORY]
 
 normalize-fn.py: Normalizes filenames downloaded from sharing services (Version 0.1.0)
@@ -28,6 +28,7 @@ optional arguments:
                        confirmation
   --skip-subtitle, -s  skip files with common subtitle extensions
   --remove-langs, -l   remove language codes from filename
+  --remove-noise, -n   remove excess chars repetition
 
 $ python3 normalize-fn.py -sl /Users/you/movies/scif-fi
 [DVDRip] Star W...) Episode I.avi -> Star Wars Episode I.avi

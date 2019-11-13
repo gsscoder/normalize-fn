@@ -150,12 +150,12 @@ def is_a_tty():
 def update_progess(actual, step, perc_text):
     completed = round(actual + step)
     completed = 32 if completed > 32 else completed
-    full = ' ' * completed if supports_color() else \
+    full = chr(9617) * completed if is_a_tty() else \
         '#' * completed
     empty = ' ' * (32 - completed)
-    bar = '     |\x1b[6;30;47m' + full + '\x1b[0m' + empty + '| ' \
+    bar = '     ' + chr(11816) + full + empty + chr(11817) + ' ' \
         if is_a_tty() else \
-            '     |' + full + empty + '| '
+            '     (' + full + empty + ') '
     print(bar + perc_text, end="\r", flush=True)
 
 

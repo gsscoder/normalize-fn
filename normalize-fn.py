@@ -136,7 +136,7 @@ def exit_and_hints(target_dir, args):
     sys.exit(message)
 
 
-def supports_color():
+def is_a_tty():
     # Ripped from: https://github.com/django/django/blob/master/django/core/management/color.py#L12
 
     plat = sys.platform
@@ -154,7 +154,7 @@ def update_progess(actual, step, perc_text):
         '#' * completed
     empty = ' ' * (32 - completed)
     bar = '     |\x1b[6;30;47m' + full + '\x1b[0m' + empty + '| ' \
-        if supports_color() else \
+        if is_a_tty() else \
             '     |' + full + empty + '| '
     print(bar + perc_text, end="\r", flush=True)
 

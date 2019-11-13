@@ -147,16 +147,20 @@ def is_a_tty():
     return supported_platform and is_a_tty
 
 
-def update_progess(actual, step, perc_text):
+def progress_anim():
+    return [10251, 10265, 10266, 10259] if is_a_tty() else [124, 47, 45, 92]  
+
+
+def update_progess(actual, step, perc_text, anim_frame):
     completed = round(actual + step)
     completed = 32 if completed > 32 else completed
     full = chr(9617) * completed if is_a_tty() else \
         '#' * completed
     empty = ' ' * (32 - completed)
-    bar = '     ' + chr(11816) + full + empty + chr(11817) + ' ' \
+    bar = f'     {chr(11816)}{full}{empty}{chr(11817)} ' \
         if is_a_tty() else \
-            '     (' + full + empty + ') '
-    print(bar + perc_text, end="\r", flush=True)
+            f'     ({full}{empty}) '
+    print(f'{bar} {anim_frame} ', perc_text, end="\r", flush=True)
 
 
 def main():
@@ -224,17 +228,21 @@ def main():
         completed = 0
         step_perc = 32 / file_count
         failed = []
+        anim = progress_anim()
+        frame = 0
 
-        update_progess(0, step_perc, f'0%/{file_count}')
+        update_progess(0, step_perc, f'0%/{file_count}', chr(anim[frame]))
         for n, (oldname, newname) in enumerate(normalized):
             time.sleep(0.1)
             if not try_rename(os.path.join(target_dir, oldname), os.path.join(target_dir, newname)):
                 failed.append(oldname)
 
             completed += step_perc
-            update_progess(completed, step_perc, f'{int(completed)}% {n + 1}/{file_count}')     
+            frame += 1
+            frame = 0 if frame == 4 else frame
+            update_progess(completed, step_perc, f'{int(completed)}% {n + 1}/{file_count}', chr(anim[frame]))     
 
-        update_progess(100, step_perc, f'100% {n + 1}/{file_count}, done.')
+        update_progess(100, step_perc, f'100% {n + 1}/{file_count}, done.', chr(anim[frame]))
         print('')
 
         if len(failed) > 0:

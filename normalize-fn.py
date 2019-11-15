@@ -147,6 +147,13 @@ def is_a_tty():
     return supported_platform and is_a_tty
 
 
+def shell_editor():
+    if sys.platform == 'win32':
+        return "Notepad"
+    else:
+        return os.environ['VISUAL'] if 'VISUAL' in os.environ else "nano"
+
+
 def progress_anim():
     return [10251, 10265, 10266, 10259] if is_a_tty() else [124, 47, 45, 92]  
 

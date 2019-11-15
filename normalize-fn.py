@@ -8,10 +8,12 @@ import os
 import re
 import time
 import json
+import atexit
 
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 script_name = os.path.basename(__file__)
+temp_scheme = None
 __version__ = '0.1.0'
 
 
@@ -107,17 +109,38 @@ def die(message):
 def dump_scheme(rename_scheme):
     temp_name =  os.path.join('.', next(_get_candidate_names()))
     try:
-        lines = [f'{new_name}\n' for _, new_name in rename_scheme]
-        help_text = f'\n# Adjust filenames or comment the ones to exclude.\n'
+        names = [f'{new_name}\n' for _, new_name in rename_scheme]
+        help_text = f'\n# Adjust filenames and/or comment the ones to exclude.\n' + \
+            '# Use \'#\' character to comment a filename.\n' + \
+            '# Please don\'t change the order or remove any line.\n'
         with open(temp_name, 'w') as temp_file:
-            temp_file.writelines(lines)
+            temp_file.writelines(names)
             temp_file.write(help_text)
         return temp_name
     except:
         return None
 
 
+def load_scheme(temp_name, rename_scheme):
+    try:
+        with open(temp_name, 'r') as temp_file:
+            names = temp_file.readlines()
+        names = [l[:-1] for l in names if len(l.strip()) > 0]
+        # Strip 3 lines of built-in trailing comments
+        names = names[:-3]
+        if len(names) != len(rename_scheme):
+            return None
+        new_scheme = []
+        for i, (old_name, _) in enumerate(rename_scheme):
+            if names[i][:1] != '#':
+                new_scheme.append((old_name, names[i]))
+        return new_scheme
+    except:
+        return None
+
+
 def confirm(target_dir, rename_scheme):
+    global temp_scheme
     file_count = len(rename_scheme)
     what_to_rename = f'all {file_count} files' if file_count > 1 else 'the file'
 
@@ -126,12 +149,14 @@ def confirm(target_dir, rename_scheme):
     if len(proceed) == 1 and proceed == 'y':
         return True
     elif len(proceed) == 1 and proceed == 'e':
-            temp_file = dump_scheme(rename_scheme)
-            if (temp_file == None):
-                die('Can\'t create temporary file.')
-            completed = run([shell_editor(), temp_file])
-            if completed.returncode != 0:
-                die('Can\'t start shell text editor.')
+        temp_file = dump_scheme(rename_scheme)
+        if (temp_file == None):
+            die('Can\'t create the temporary file.')
+        completed = run([shell_editor(), temp_file])
+        if completed.returncode != 0:
+            die('Can\'t start the shell text editor.')
+        temp_scheme = temp_file
+        return True
     elif len(proceed) == 1 and (proceed == 'n' or proceed == 'q'):
         return False
 
@@ -153,6 +178,13 @@ def try_rename(oldname, newname):
         return True
     except:
         return False
+
+
+def remove_temp_scheme():
+    try:
+        os.remove(temp_scheme)
+    except:
+        pass
 
 
 def exit_and_hints(target_dir, args):
@@ -200,6 +232,8 @@ def update_progess(actual, step, perc_text, anim_frame):
 
 
 def main():
+    atexit.register(remove_temp_scheme)
+
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \
                      f'Python:  {python_version()}'
@@ -259,6 +293,11 @@ def main():
         proceed = confirm(target_dir, normalized)
 
     if proceed:
+        if temp_scheme != None:
+            normalized = load_scheme(temp_scheme, normalized) 
+            if len(normalized) == 0:
+                die("Nothing done")
+
         print(f'Renaming into \'{target_dir}\'...')
  
         completed = 0

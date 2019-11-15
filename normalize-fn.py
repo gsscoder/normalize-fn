@@ -9,10 +9,12 @@ import re
 import time
 import json
 import atexit
-
+import urllib.request
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 script_name = os.path.basename(__file__)
+config_name = f'{script_name}.json'
+config_url = 'https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py.json'
 temp_scheme = None
 __version__ = '0.1.0'
 
@@ -66,9 +68,18 @@ def normalize(filename, acronyms_re, remove_noise):
     return f'{basename}{ext}'
 
 
+def init_config():
+    try:
+        if not os.path.exists(config_name):
+            print(f'{script_name}: Configuration file not found. Downloading...\n')
+            urllib.request.urlretrieve(config_url, os.path.join('.', config_name))
+    except:
+        die('Can\'t download configuration file')    
+
+
 def load_config():
     try:
-        return json.loads(open(f'{script_name}.json').read())
+        return json.loads(open(config_name).read())
     except:
         return None
 
@@ -233,6 +244,7 @@ def update_progess(actual, step, perc_text, anim_frame):
 
 def main():
     atexit.register(remove_temp_scheme)
+    init_config()
 
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \

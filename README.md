@@ -7,7 +7,6 @@ Makes filenames downloaded from sharing services more readable.
 ## Install
 ```sh
 $ wget https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py
-$ wget https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py.json
 ```
 
 ## Usage

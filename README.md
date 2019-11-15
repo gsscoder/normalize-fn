@@ -36,7 +36,8 @@ $ python3 normalize-fn.py -sl /Users/you/movies/scif-fi
 HD BluRay Star W...Episode II.avi -> Star Wars Episode II.avi
 (PERFECT) Alien ... 254] AAC3.mkv -> Alien VS Predator.mkv
 
-normalize-fn.py: sure you want to rename all 3 files in /Users/you/movies/scif-fi [yn]?y
+Hit 'e' to edit the list.
+normalize-fn.py: sure you want to rename all 3 files in /Users/you/movies/scif-fi [yne]?y
 Renaming into '/Users/you/movies/scif-fi'...
 Renaming files 100% 3/3, done.
 ```

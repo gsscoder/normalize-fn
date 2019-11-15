@@ -1,6 +1,8 @@
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from platform import python_version
 from operator import itemgetter
+from tempfile import _get_candidate_names
+from subprocess import run
 import sys
 import os
 import re
@@ -87,6 +89,7 @@ def print_preview(normalized):
 
     if len(preview) > 0:
         print('')
+        print(f'Hit \'e\' to edit the list.')
 
 
 def print_failed(failed):
@@ -96,17 +99,43 @@ def print_failed(failed):
         print(f)
 
 
-def confirm(target_dir, file_count):
+def die(message):
+    print(f'{script_name}: {message}')
+    sys.exit(1)
+
+
+def dump_scheme(rename_scheme):
+    temp_name =  os.path.join('.', next(_get_candidate_names()))
+    try:
+        lines = [f'{new_name}\n' for _, new_name in rename_scheme]
+        help_text = f'\n# Adjust filenames or comment the ones to exclude.\n'
+        with open(temp_name, 'w') as temp_file:
+            temp_file.writelines(lines)
+            temp_file.write(help_text)
+        return temp_name
+    except:
+        return None
+
+
+def confirm(target_dir, rename_scheme):
+    file_count = len(rename_scheme)
     what_to_rename = f'all {file_count} files' if file_count > 1 else 'the file'
 
-    proceed = input(f'{script_name}: sure you want to rename {what_to_rename} in {target_dir} [yn]?')
+    proceed = input(f'{script_name}: sure you want to rename {what_to_rename} in {target_dir} [yne]?')
 
     if len(proceed) == 1 and proceed == 'y':
         return True
+    elif len(proceed) == 1 and proceed == 'e':
+            temp_file = dump_scheme(rename_scheme)
+            if (temp_file == None):
+                die('Can\'t create temporary file.')
+            completed = run([shell_editor(), temp_file])
+            if completed.returncode != 0:
+                die('Can\'t start shell text editor.')
     elif len(proceed) == 1 and (proceed == 'n' or proceed == 'q'):
         return False
 
-    return confirm(target_dir, file_count)
+    return confirm(target_dir, rename_scheme)
 
 
 def is_hidden(filepath):
@@ -133,7 +162,7 @@ def exit_and_hints(target_dir, args):
         message += '\nPlease try with --remove-langs option.'
     if not args.remove_noise:
         message += '\nPlease try with --remove-noise option.'
-    sys.exit(message)
+    die(message)
 
 
 def is_a_tty():
@@ -201,12 +230,12 @@ def main():
 
     target_dir = os.path.realpath(args.directory if args.directory != None else '.')
     if not os.path.exists(target_dir):
-        sys.exit(f'{script_name}: {target_dir}: no such file or directory')
+        die(f'{target_dir}: no such file or directory')
 
     # Filter files excluding directories
     files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
     if len(files) == 0:
-        sys.exit(f'{script_name}: {target_dir}: contains no files')
+        die(f'{target_dir}: contains no files')
 
     # Skip subtitle files if requested
     if args.skip_subtitle:
@@ -227,7 +256,7 @@ def main():
     proceed = True
     if not args.force:
         print_preview(normalized)
-        proceed = confirm(target_dir, file_count)
+        proceed = confirm(target_dir, normalized)
 
     if proceed:
         print(f'Renaming into \'{target_dir}\'...')

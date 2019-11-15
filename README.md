@@ -30,14 +30,14 @@ optional arguments:
   --remove-langs, -l   remove language codes from filename
   --remove-noise, -n   remove excess chars repetition
 
-$ python3 normalize-fn.py -sl /Users/you/movies/scif-fi
+$ python3 normalize-fn.py -sl /somewhere/your/movies/scif-fi
 [DVDRip] Star W...) Episode I.avi -> Star Wars Episode I.avi
 HD BluRay Star W...Episode II.avi -> Star Wars Episode II.avi
 (PERFECT) Alien ... 254] AAC3.mkv -> Alien VS Predator.mkv
 
 Hit 'e' to edit the list.
-normalize-fn.py: sure you want to rename all 3 files in /Users/you/movies/scif-fi [yne]?y
-Renaming into '/Users/you/movies/scif-fi'...
+normalize-fn.py: sure you want to rename all 3 files in /somewhere/your/movies/scif-fi [yne]?y
+Renaming into '/somewhere/your/movies/scif-fi'...
 Renaming files 100% 3/3, done.
 ```
 

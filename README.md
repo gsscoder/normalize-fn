@@ -42,5 +42,8 @@ Renaming into '/Users/you/movies/scif-fi'...
 Renaming files 100% 3/3, done.
 ```
 
+## Editor
+When you're prompted to proceed you could choose to review file names for customizations, hitting **E key**. When running on Windows the editor used is always **Notepad**. In ***nix** systems is the shell one, configured using `VISUAL` environment variable.
+
 ### Disclaimer
 - You should not download any kind of media illegally.

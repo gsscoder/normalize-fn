@@ -43,6 +43,3 @@ Renaming files 100% 3/3, done.
 
 ### Disclaimer
 - You should not download any kind of media illegally.
-
-### Notes
-- This script is thought for making certain filenames more readable. May save you a lot of time, but for now doesn't do miracles!

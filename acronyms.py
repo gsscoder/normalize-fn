@@ -26,7 +26,7 @@ def build_re(args):
     if args.remove_langs:
         more_acronyms = RE_LANGUAGES
     if args.remove_noise:
-        if not more_acronyms:
+        if more_acronyms:
             more_acronyms += '|'
         more_acronyms += '|'.join(extra)
     acronyms = f'(?:^|(?<=))({RE_COMMON})|'

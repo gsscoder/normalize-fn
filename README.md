@@ -19,9 +19,9 @@ $ python3 normalizefn.py --version
 # Usage
 ```
 $ python3 normalizefn.py --help
-usage: normalize-fn.py [-h] [--version] [--force] [--skip-subtitle]
-                       [--remove-langs] [--remove-noise]
-                       [DIRECTORY]
+usage: normalizefn.py [-h] [--version] [--force] [--skip-subtitle]
+                      [--remove-langs] [--remove-noise] [--list-dir]
+                      [DIRECTORY]
 
 normalizefn.py: Normalizes filenames downloaded from sharing services (Version 0.2.0)
 
@@ -31,11 +31,12 @@ positional arguments:
 optional arguments:
   -h, --help           show this help message and exit
   --version            display version information
-  --force, -f          attempt to rename the files without prompting for
+  --force, -f          attempt to rename files without prompting for
                        confirmation
   --skip-subtitle, -s  skip files with common subtitle extensions
   --remove-langs, -l   remove language codes from filename
   --remove-noise, -n   remove excess chars repetition
+  --list-dir, -d       list directory of renamed files
 
 $ python3 normalize-fn.py -sl /somewhere/your/movies/scif-fi
 [DVDRip] Star W...) Episode I.avi -> Star Wars Episode I.avi

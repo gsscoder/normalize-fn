@@ -3,7 +3,7 @@ import os
 from subprocess import run
 
 import shell
-import storage
+import scheme
 
 
 script_name = os.path.basename(__file__)
@@ -40,7 +40,7 @@ def confirm(target_dir, rename_scheme):
     if len(proceed) == 1 and proceed == 'y':
         return (True, None)
     elif len(proceed) == 1 and proceed == 'e':
-        temp_file = storage.dump_scheme(rename_scheme)
+        temp_file = scheme.save(rename_scheme)
         if (temp_file == None):
             die('Can\'t create the temporary file.')
         completed = run([shell.editor(), temp_file])

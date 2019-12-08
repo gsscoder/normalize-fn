@@ -2,7 +2,7 @@ import os
 from tempfile import _get_candidate_names
 
 
-def dump_scheme(rename_scheme):
+def save(rename_scheme):
     temp_name =  os.path.join('.', next(_get_candidate_names()))
     try:
         names = [f'{new_name}\n' for _, new_name in rename_scheme]
@@ -17,7 +17,7 @@ def dump_scheme(rename_scheme):
         return None
 
 
-def load_scheme(temp_name, rename_scheme):
+def load(temp_name, rename_scheme):
     try:
         with open(temp_name, 'r') as temp_file:
             names = temp_file.readlines()
@@ -33,3 +33,10 @@ def load_scheme(temp_name, rename_scheme):
         return new_scheme
     except:
         return None
+
+
+def remove(temp_scheme):
+    try:
+        os.remove(temp_scheme)
+    except:
+        pass

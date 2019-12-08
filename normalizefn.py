@@ -12,13 +12,11 @@ import urllib.request
 import acronyms
 import ui
 import shell
-import storage
+import scheme
 
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 __version__ = '0.2.0'
-
-# temp_scheme = None
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -45,15 +43,8 @@ def normalize(filename, acronyms_re, remove_noise):
     return f'{basename}{ext}'
 
 
-def remove_temp_scheme():
-    try:
-        os.remove(temp_scheme)
-    except:
-        pass
-
-
 def main():
-    atexit.register(remove_temp_scheme)
+    #atexit.register(scheme.remove)
 
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \
@@ -115,10 +106,14 @@ def main():
     if not args.force:
         ui.print_preview(normalized)
         proceed, temp_scheme = ui.confirm(target_dir, normalized)
+        if temp_scheme:
+            def remove_scheme():
+                scheme.remove(temp_scheme)
+            atexit.register(remove_scheme)
 
     if proceed:
         if temp_scheme:
-            normalized = storage.load_scheme(temp_scheme, normalized) 
+            normalized = scheme.load(temp_scheme, normalized) 
             if len(normalized) == 0:
                 ui.die("Nothing done")
 

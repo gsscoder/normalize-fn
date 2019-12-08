@@ -12,7 +12,7 @@ import urllib.request
 import acronyms
 import ui
 import shell
-import io
+import storage
 
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
@@ -118,7 +118,7 @@ def main():
 
     if proceed:
         if temp_scheme != None:
-            normalized = io.load_scheme(temp_scheme, normalized) 
+            normalized = storage.load_scheme(temp_scheme, normalized) 
             if len(normalized) == 0:
                 ui.die("Nothing done")
 

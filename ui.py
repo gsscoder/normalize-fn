@@ -3,7 +3,7 @@ import os
 from subprocess import run
 
 import shell
-import io
+import storage
 
 
 script_name = os.path.basename(__file__)
@@ -41,7 +41,7 @@ def confirm(target_dir, rename_scheme):
     if len(proceed) == 1 and proceed == 'y':
         return True
     elif len(proceed) == 1 and proceed == 'e':
-        temp_file = io.dump_scheme(rename_scheme)
+        temp_file = storage.dump_scheme(rename_scheme)
         if (temp_file == None):
             die('Can\'t create the temporary file.')
         completed = run([shell.editor(), temp_file])
@@ -65,7 +65,8 @@ def shell_editor():
 def list_dir(path):
     print(f'Files in {path}:')
     for entry in os.listdir(path):
-        if os.path.isfile(entry) and not shell.is_hidden(entry):
+        entry_path = os.path.join(path, entry)
+        if os.path.isfile(entry_path) and not shell.is_hidden(entry_path):
             print(f'  {entry}')
 
 

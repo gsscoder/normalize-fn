@@ -107,9 +107,7 @@ def main():
         ui.print_preview(normalized)
         proceed, temp_scheme = ui.confirm(target_dir, normalized)
         if temp_scheme:
-            def remove_scheme():
-                scheme.remove(temp_scheme)
-            atexit.register(remove_scheme)
+            atexit.register(lambda : scheme.remove(temp_scheme))
 
     if proceed:
         if temp_scheme:

@@ -57,7 +57,7 @@ def main():
                         help='display version information')
     parser.add_argument('--force', '-f',
                         action='store_true',  dest='force', default=False,
-                        help='attempt to rename the files without prompting for confirmation')
+                        help='attempt to rename files without prompting for confirmation')
     parser.add_argument('--skip-subtitle', '-s',
                         action='store_true',  dest='skip_subtitle', default=False,
                         help='skip files with common subtitle extensions')

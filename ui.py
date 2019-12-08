@@ -32,14 +32,13 @@ def print_failed(failed):
 
 
 def confirm(target_dir, rename_scheme):
-    global temp_scheme
     file_count = len(rename_scheme)
     what_to_rename = f'all {file_count} files' if file_count > 1 else 'the file'
 
     proceed = input(f'{script_name}: sure you want to rename {what_to_rename} in {target_dir} [yne]?')
 
     if len(proceed) == 1 and proceed == 'y':
-        return True
+        return (True, None)
     elif len(proceed) == 1 and proceed == 'e':
         temp_file = storage.dump_scheme(rename_scheme)
         if (temp_file == None):
@@ -47,10 +46,9 @@ def confirm(target_dir, rename_scheme):
         completed = run([shell.editor(), temp_file])
         if completed.returncode != 0:
             die('Can\'t start the shell text editor.')
-        temp_scheme = temp_file
-        return True
+        return (True, temp_file)
     elif len(proceed) == 1 and (proceed == 'n' or proceed == 'q'):
-        return False
+        return (False, None)
 
     return confirm(target_dir, rename_scheme)
 

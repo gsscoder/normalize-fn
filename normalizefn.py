@@ -18,7 +18,7 @@ import storage
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 __version__ = '0.2.0'
 
-temp_scheme = None
+# temp_scheme = None
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -114,10 +114,10 @@ def main():
     proceed = True
     if not args.force:
         ui.print_preview(normalized)
-        proceed = ui.confirm(target_dir, normalized)
+        proceed, temp_scheme = ui.confirm(target_dir, normalized)
 
     if proceed:
-        if temp_scheme != None:
+        if temp_scheme:
             normalized = storage.load_scheme(temp_scheme, normalized) 
             if len(normalized) == 0:
                 ui.die("Nothing done")

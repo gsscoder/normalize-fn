@@ -3,6 +3,7 @@ import json
 
 
 EXTRA_FILENAME = "extra.json"
+
 RE_COMMON = (
     'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|'
     'WEBMux|DLMux|DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|'

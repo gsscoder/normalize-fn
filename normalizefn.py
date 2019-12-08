@@ -16,8 +16,9 @@ import io
 
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
-temp_scheme = None
 __version__ = '0.2.0'
+
+temp_scheme = None
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -75,6 +76,9 @@ def main():
     parser.add_argument('--remove-noise', '-n',
                         action='store_true', dest='remove_noise', default=False,
                         help='remove excess chars repetition')
+    parser.add_argument('--list-dir', '-d',
+                        action='store_true', dest='list_dir', default=False,
+                        help='list directory of renamed files')
     parser.add_argument('directory',
                         nargs='?', metavar='DIRECTORY',
                         action='store',
@@ -142,6 +146,9 @@ def main():
 
         if len(failed) > 0:
             ui.print_failed(failed)
+
+        if args.list_dir:
+            ui.list_dir(target_dir)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 # Custom
 .vscode
-run-demo.sh
+tools/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

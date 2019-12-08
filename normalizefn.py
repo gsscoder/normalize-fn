@@ -10,38 +10,13 @@ import time
 import json
 import atexit
 import urllib.request
+import acronyms
+
 
 module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
 script_name = os.path.basename(__file__)
-config_name = f'{script_name}.json'
-config_url = 'https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py.json'
 temp_scheme = None
-__version__ = '0.1.0'
-
-
-def get_acronyms_re(args, config):
-    acronyms = (
-        r'(?:^|(?<=))('
-        r'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|DVDMux|WEBMux|DLMux|'
-        r'DVD5|DVD9|BRRip|BDRip|BDMux|BluRay|VU|SBS|WEB-DL|WEBRip|WEB-RIP|HDTV|HDTS|PDTV|'
-        r'SATRip|SAT RIP|DVBRip|DVDRip|DRip|DVB-S|DTTRip|TVRip|TV TIP|WP|SCREENER|'
-        r'HQ|TV|RIP|SUBS|1080p|HEVC|720p|'
-        r'AAC|AC3|MP3|DTS|MD|LD|DD|DSP|DSP2|AVC|'
-        r'H 264|HD|HD 720|DivX|XviD|x264|x265)|')
-
-    config_acronyms = []
-
-    if args.remove_langs and config != None:
-        config_acronyms.extend(config['lang.codes'])
-        config_acronyms.extend(config['lang.descs'])
-
-    if args.remove_noise and config != None:
-        config_acronyms.extend(config['extra.acronyms'])
-
-    if len(config_acronyms) > 0:
-        acronyms += r'\b(' + '|'.join(config_acronyms) + r')\b'
-
-    return acronyms + r'(?:(?=)|$)'
+__version__ = '0.2.0'
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -57,7 +32,7 @@ def normalize(filename, acronyms_re, remove_noise):
      # Remove noise
     if remove_noise:
         # Remove chars repeated more than 3 times
-        basename = re.sub(r'(.)\1{3,}', '', basename)
+        basename = re.sub(r'([^\s])\1{3,}', '', basename)
         # Remove beginning and trailing dashes 
         basename = re.sub(r'^(-)|(-)$', '', basename)
         # Remove underscores
@@ -66,22 +41,6 @@ def normalize(filename, acronyms_re, remove_noise):
     basename = ' '.join(basename.split())
 
     return f'{basename}{ext}'
-
-
-def init_config():
-    try:
-        if not os.path.exists(config_name):
-            print(f'{script_name}: Configuration file not found. Downloading...\n')
-            urllib.request.urlretrieve(config_url, os.path.join('.', config_name))
-    except:
-        die('Can\'t download configuration file')    
-
-
-def load_config():
-    try:
-        return json.loads(open(config_name).read())
-    except:
-        return None
 
 
 def shorten(filename):
@@ -200,7 +159,7 @@ def remove_temp_scheme():
 
 def exit_and_hints(target_dir, args):
     message = f'{script_name}: {target_dir}: contains no filenames to normalize\n' + \
-        'Try to edit \'extra.acronyms\' in {script_name}.json.'
+        'Try to edit \'extra.json\'.'
     if not args.remove_langs:
         message += '\nPlease try with --remove-langs option.'
     if not args.remove_noise:
@@ -244,7 +203,6 @@ def update_progess(actual, step, perc_text, anim_frame):
 
 def main():
     atexit.register(remove_temp_scheme)
-    init_config()
 
     version_string = f'{module_name}\n' + \
                      f'Version: {__version__}\n' + \
@@ -276,19 +234,19 @@ def main():
 
     target_dir = os.path.realpath(args.directory if args.directory != None else '.')
     if not os.path.exists(target_dir):
-        die(f'{target_dir}: no such file or directory')
+        die(f'{target_dir}: No such file or directory')
 
     # Filter files excluding directories
     files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
     if len(files) == 0:
-        die(f'{target_dir}: contains no files')
+        die(f'{target_dir}: Contains no files')
 
     # Skip subtitle files if requested
     if args.skip_subtitle:
         files = [f for f in files if not is_subtitle(f)]
 
     # Normalize excluding hidden files
-    acronyms_re = re.compile(get_acronyms_re(args, load_config()), re.IGNORECASE)
+    acronyms_re = re.compile(acronyms.build_re(args), re.IGNORECASE)
     normalized = [(f, normalize(f, acronyms_re, args.remove_noise)) \
                     for f in files if not is_hidden(os.path.join(target_dir, f))]
 

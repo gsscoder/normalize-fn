@@ -2,21 +2,28 @@
 
 Makes filenames downloaded from sharing services more readable.
 
-[![asciicast](https://asciinema.org/a/281509.svg)](https://asciinema.org/a/281509)
+[![asciicast](https://asciinema.org/a/286197.svg)](https://asciinema.org/a/286197)
 
 ## Install
 ```sh
-$ wget https://raw.githubusercontent.com/gsscoder/normalize-fn/master/normalize-fn.py
+# clone the repository
+$ git clone https://github.com/gsscoder/normalize-fn.git
+
+# change the working directory
+$ cd normalize-fn
+
+# verify if it runs
+$ python3 normalizefn.py --version
 ```
 
-## Usage
-```sh
-$ python3 normalize-fn.py --help
+# Usage
+```
+$ python3 normalizefn.py --help
 usage: normalize-fn.py [-h] [--version] [--force] [--skip-subtitle]
                        [--remove-langs] [--remove-noise]
                        [DIRECTORY]
 
-normalize-fn.py: Normalizes filenames downloaded from sharing services (Version 0.1.0)
+normalizefn.py: Normalizes filenames downloaded from sharing services (Version 0.2.0)
 
 positional arguments:
   DIRECTORY            directory containg the files to rename
@@ -36,7 +43,7 @@ HD BluRay Star W...Episode II.avi -> Star Wars Episode II.avi
 (PERFECT) Alien ... 254] AAC3.mkv -> Alien VS Predator.mkv
 
 Hit 'e' to edit the list.
-normalize-fn.py: sure you want to rename all 3 files in /somewhere/your/movies/scif-fi [yne]?y
+normalizefn.py: sure you want to rename all 3 files in /somewhere/your/movies/scif-fi [yne]?y
 Renaming into '/somewhere/your/movies/scif-fi'...
 Renaming files 100% 3/3, done.
 ```

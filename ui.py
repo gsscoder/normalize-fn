@@ -6,7 +6,7 @@ import shell
 import scheme
 
 
-script_name = os.path.basename(__file__)
+SCRIPT_NAME = 'normalizefn.py'
 
 
 def print_preview(normalized):
@@ -26,7 +26,7 @@ def print_preview(normalized):
 
 def print_failed(failed):
     print('\n')
-    print(f'{script_name}: impossible to rename the following file(s):')
+    print(f'{SCRIPT_NAME}: impossible to rename the following file(s):')
     for f in failed:
         print(f)
 
@@ -35,7 +35,7 @@ def confirm(target_dir, rename_scheme):
     file_count = len(rename_scheme)
     what_to_rename = f'all {file_count} files' if file_count > 1 else 'the file'
 
-    proceed = input(f'{script_name}: sure you want to rename {what_to_rename} in {target_dir} [yne]?')
+    proceed = input(f'{SCRIPT_NAME}: sure you want to rename {what_to_rename} in {target_dir} [yne]?')
 
     if len(proceed) == 1 and proceed == 'y':
         return (True, None)
@@ -85,7 +85,7 @@ def update_progess(actual, step, perc_text, anim_frame):
 
 
 def exit_and_hints(target_dir, args):
-    message = f'{script_name}: {target_dir}: contains no filenames to normalize\n' + \
+    message = f'{SCRIPT_NAME}: {target_dir}: contains no filenames to normalize\n' + \
         'Try to edit \'extra.json\'.'
     if not args.remove_langs:
         message += '\nPlease try with --remove-langs option.'
@@ -95,7 +95,7 @@ def exit_and_hints(target_dir, args):
 
 
 def die(message):
-    print(f'{script_name}: {message}')
+    print(f'{SCRIPT_NAME}: {message}')
     sys.exit(1)
 
 

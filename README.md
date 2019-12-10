@@ -16,7 +16,7 @@ $ cd normalize-fn
 $ python3 normalizefn.py --version
 ```
 
-# Usage
+## Usage
 ```
 $ python3 normalizefn.py --help
 usage: normalizefn.py [-h] [--version] [--force] [--skip-subtitle]

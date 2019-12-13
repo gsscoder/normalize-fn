@@ -5,6 +5,7 @@ Makes filenames downloaded from sharing services more readable.
 [![asciicast](https://asciinema.org/a/286197.svg)](https://asciinema.org/a/286197)
 
 ## Install
+
 ```sh
 # clone the repository
 $ git clone https://github.com/gsscoder/normalize-fn.git
@@ -17,6 +18,7 @@ $ python3 normalizefn.py --version
 ```
 
 ## Usage
+
 ```
 $ python3 normalizefn.py --help
 usage: normalizefn.py [-h] [--version] [--force] [--skip-subtitle]
@@ -50,7 +52,9 @@ Renaming files 100% 3/3, done.
 ```
 
 ## Editor
+
 When you're prompted to proceed you could choose to review file names for customizations, hitting **E key**. When running on Windows the editor used is always **Notepad**. In ***nix** systems is the shell one, configured using `VISUAL` environment variable.
 
 ### Disclaimer
+
 - You should not download any kind of media illegally.

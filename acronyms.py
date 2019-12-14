@@ -29,7 +29,7 @@ def build_re(args):
         if more_acronyms:
             more_acronyms += '|'
         more_acronyms += '|'.join(extra)
-    acronyms = f'(?:^|(?<=))({RE_COMMON})|'
+    acronyms = '(?:^|(?<=))({})|'.format(RE_COMMON)
     if more_acronyms:
         acronyms += r'\b(' + more_acronyms + r')\b'
     return acronyms + r'(?:(?=)|$)'

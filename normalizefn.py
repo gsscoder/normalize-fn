@@ -1,13 +1,10 @@
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from platform import python_version
 from operator import itemgetter
-import sys
 import os
 import re
 import time
-import json
 import atexit
-import urllib.request
 
 import acronyms
 import ui
@@ -15,8 +12,8 @@ import shell
 import scheme
 
 
-module_name = '%(prog)s: Normalizes filenames downloaded from sharing services'
-__version__ = '0.2.0'
+MODULE_NAME = '%(prog)s: Normalizes filenames downloaded from sharing services'
+__version__ = '0.5.0'
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -40,18 +37,16 @@ def normalize(filename, acronyms_re, remove_noise):
     # Remove exceeding spaces
     basename = ' '.join(basename.split())
 
-    return f'{basename}{ext}'
+    return '{}{}'.format(basename, ext)
 
 
 def main():
-    #atexit.register(scheme.remove)
-
-    version_string = f'{module_name}\n' + \
-                     f'Version: {__version__}\n' + \
-                     f'Python:  {python_version()}'
+    version_string = ('{}\n'
+                      'Version: {}\n'
+                      'Python:  {}').format(MODULE_NAME, __version__, python_version())
 
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
-                            description=f'{module_name} (Version {__version__})')
+                            description='{} (Version {})'.format(MODULE_NAME, __version__))
     parser.add_argument('--version',
                         action='version',  version=version_string,
                         help='display version information')
@@ -79,12 +74,12 @@ def main():
 
     target_dir = os.path.realpath(args.directory if args.directory != None else '.')
     if not os.path.exists(target_dir):
-        ui.die(f'{target_dir}: No such file or directory')
+        ui.die('{}: No such file or directory'.format(target_dir))
 
     # Filter files excluding directories
     files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
-    if len(files) == 0:
-        ui.die(f'{target_dir}: Contains no files')
+    if not files:
+        ui.die('{}: Contains no files'.format(target_dir))
 
     # Skip subtitle files if requested
     if args.skip_subtitle:
@@ -112,10 +107,10 @@ def main():
     if proceed:
         if temp_scheme:
             normalized = scheme.load(temp_scheme, normalized) 
-            if len(normalized) == 0:
+            if not normalized:
                 ui.die("Nothing done")
 
-        print(f'Renaming into \'{target_dir}\'...')
+        print('Renaming into \'{}\'...'.format(target_dir))
  
         completed = 0
         step_perc = 32 / file_count
@@ -123,7 +118,7 @@ def main():
         anim = ui.progress_anim()
         frame = 0
 
-        ui.update_progess(0, step_perc, f'0%/{file_count}', chr(anim[frame]))
+        ui.update_progess(0, step_perc, '0% 0/{}'.format(file_count), chr(anim[frame]))
         for n, (oldname, newname) in enumerate(normalized):
             time.sleep(0.1)
             if not shell.try_rename(os.path.join(target_dir, oldname), os.path.join(target_dir, newname)):
@@ -132,12 +127,12 @@ def main():
             completed += step_perc
             frame += 1
             frame = 0 if frame == 4 else frame
-            ui.update_progess(completed, step_perc, f'{int(completed)}% {n + 1}/{file_count}', chr(anim[frame]))     
+            ui.update_progess(completed, step_perc, '{}% {}/{}'.format(int(completed), n + 1, file_count), chr(anim[frame]))     
 
-        ui.update_progess(100, step_perc, f'100% {n + 1}/{file_count}, done.', chr(anim[frame]))
+        ui.update_progess(100, step_perc, '100% {}/{}, done.'.format(n + 1, file_count), chr(anim[frame]))
         print('')
 
-        if len(failed) > 0:
+        if failed:
             ui.print_failed(failed)
 
         if args.list_dir:

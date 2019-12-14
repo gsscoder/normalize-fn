@@ -4,11 +4,12 @@ from tempfile import _get_candidate_names
 
 def save(rename_scheme):
     temp_name =  os.path.join('.', next(_get_candidate_names()))
+    
     try:
-        names = [f'{new_name}\n' for _, new_name in rename_scheme]
-        help_text = f'\n# Adjust filenames and/or comment the ones to exclude.\n' + \
-            '# Use \'#\' character to comment a filename.\n' + \
-            '# Please don\'t change the order or remove any line.\n'
+        names = ['{}\n'.format(new_name) for _, new_name in rename_scheme]
+        help_text = ('\n# Adjust filenames and/or comment the ones to exclude.\n'
+                     '# Use \'#\' character to comment a filename.\n'
+                     '# Please don\'t change the order or remove any line.\n')
         with open(temp_name, 'w') as temp_file:
             temp_file.writelines(names)
             temp_file.write(help_text)

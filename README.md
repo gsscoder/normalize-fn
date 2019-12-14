@@ -6,6 +6,7 @@ Makes filenames downloaded from sharing services more readable.
 
 ## Install
 
+**NOTE**: Python 2.7 or higher is required.
 ```sh
 # clone the repository
 $ git clone https://github.com/gsscoder/normalize-fn.git
@@ -14,18 +15,18 @@ $ git clone https://github.com/gsscoder/normalize-fn.git
 $ cd normalize-fn
 
 # verify if it runs
-$ python3 normalizefn.py --version
+$ python normalizefn.py --version
 ```
 
 ## Usage
 
 ```
-$ python3 normalizefn.py --help
+$ python normalizefn.py --help
 usage: normalizefn.py [-h] [--version] [--force] [--skip-subtitle]
                       [--remove-langs] [--remove-noise] [--list-dir]
                       [DIRECTORY]
 
-normalizefn.py: Normalizes filenames downloaded from sharing services (Version 0.2.0)
+normalizefn.py: Normalizes filenames downloaded from sharing services (Version 0.5.0)
 
 positional arguments:
   DIRECTORY            directory containg the files to rename

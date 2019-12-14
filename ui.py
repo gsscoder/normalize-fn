@@ -38,7 +38,8 @@ def confirm(target_dir, rename_scheme):
     what_to_rename = 'all {} files'.format(file_count) if file_count > 1 else 'the file'
 
     proceed = input(
-        '{}: sure you want to rename {} in {} [yne]?'.format(SCRIPT_NAME, what_to_rename, target_dir))
+        '{}: sure you want to rename {} in {} [yne]?' \
+        .format(SCRIPT_NAME, what_to_rename, target_dir)).lower()
 
     if len(proceed) == 1 and proceed == 'y':
         return (True, None)

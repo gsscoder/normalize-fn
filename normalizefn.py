@@ -139,7 +139,7 @@ def main():
             frame = 0 if frame == 4 else frame
             update_progess(completed, step_perc, '{}% {}/{}'.format(int(completed), n + 1, file_count), chr(anim[frame]))     
 
-        update_progess(100, step_perc, '100% {}/{}, done.'.format(n + 1, file_count), chr(anim[frame]))
+        update_progess(100, step_perc, '100% {}/{}, done.'.format(file_count, file_count), chr(anim[frame]))
         print('')
 
         if failed:

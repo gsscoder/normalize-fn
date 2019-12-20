@@ -2,7 +2,7 @@ import os
 from tempfile import _get_candidate_names
 
 
-def save(rename_scheme):
+def save_scheme(rename_scheme):
     temp_name =  os.path.join('.', next(_get_candidate_names()))
     
     try:
@@ -18,7 +18,7 @@ def save(rename_scheme):
         return None
 
 
-def load(temp_name, rename_scheme):
+def load_scheme(temp_name, rename_scheme):
     try:
         with open(temp_name, 'r') as temp_file:
             names = temp_file.readlines()
@@ -36,7 +36,7 @@ def load(temp_name, rename_scheme):
         return None
 
 
-def remove(temp_scheme):
+def remove_scheme(temp_scheme):
     try:
         os.remove(temp_scheme)
     except:

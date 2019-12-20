@@ -6,14 +6,24 @@ import re
 import time
 import atexit
 
-import acronyms
-import ui
-import shell
-import scheme
+from scheme import load_scheme, \
+                   remove_scheme
+from acronyms import build_re
+from common import die
+from ui import progress_anim, \
+               update_progess, \
+               confirm, \
+               print_preview, \
+               print_failed, \
+               list_dir, \
+               exit_and_hints
+from shell import try_rename, \
+                  is_hidden, \
+                  is_subtitle
 
 
 MODULE_NAME = '%(prog)s: Normalizes filenames downloaded from sharing services'
-__version__ = '0.5.0'
+__version__ = '0.6.0'
 
 
 def normalize(filename, acronyms_re, remove_noise):
@@ -74,69 +84,69 @@ def main():
 
     target_dir = os.path.realpath(args.directory if args.directory != None else '.')
     if not os.path.exists(target_dir):
-        ui.die('{}: No such file or directory'.format(target_dir))
+        die('{}: No such file or directory'.format(target_dir))
 
     # Filter files excluding directories
     files = [f for f in os.listdir(target_dir) if os.path.isfile(os.path.join(target_dir, f))]
     if not files:
-        ui.die('{}: Contains no files'.format(target_dir))
+        die('{}: Contains no files'.format(target_dir))
 
     # Skip subtitle files if requested
     if args.skip_subtitle:
-        files = [f for f in files if not shell.is_subtitle(f)]
+        files = [f for f in files if not is_subtitle(f)]
 
     # Normalize excluding hidden files
-    acronyms_re = re.compile(acronyms.build_re(args), re.IGNORECASE)
+    acronyms_re = re.compile(build_re(args), re.IGNORECASE)
     normalized = [(f, normalize(f, acronyms_re, args.remove_noise)) \
-                    for f in files if not shell.is_hidden(os.path.join(target_dir, f))]
+                    for f in files if not is_hidden(os.path.join(target_dir, f))]
 
     # Remove files that don't need rename
     normalized = [(oldname, newname) for oldname, newname in normalized if oldname != newname]
 
     file_count = len(normalized)
     if file_count == 0:
-        ui.exit_and_hints(target_dir, args)
+        exit_and_hints(target_dir, args)
 
     proceed = True
     if not args.force:
-        ui.print_preview(normalized)
-        proceed, temp_scheme = ui.confirm(target_dir, normalized)
+        print_preview(normalized)
+        proceed, temp_scheme = confirm(target_dir, normalized)
         if temp_scheme:
-            atexit.register(lambda : scheme.remove(temp_scheme))
+            atexit.register(lambda : remove_scheme(temp_scheme))
 
     if proceed:
         if temp_scheme:
-            normalized = scheme.load(temp_scheme, normalized) 
+            normalized = load_scheme(temp_scheme, normalized) 
             if not normalized:
-                ui.die("Nothing done")
+                die("Nothing done")
 
         print('Renaming into \'{}\'...'.format(target_dir))
  
         completed = 0
         step_perc = 32 / file_count
         failed = []
-        anim = ui.progress_anim()
+        anim = progress_anim()
         frame = 0
 
-        ui.update_progess(0, step_perc, '0% 0/{}'.format(file_count), chr(anim[frame]))
+        update_progess(0, step_perc, '0% 0/{}'.format(file_count), chr(anim[frame]))
         for n, (oldname, newname) in enumerate(normalized):
             time.sleep(0.1)
-            if not shell.try_rename(os.path.join(target_dir, oldname), os.path.join(target_dir, newname)):
+            if not try_rename(os.path.join(target_dir, oldname), os.path.join(target_dir, newname)):
                 failed.append(oldname)
 
             completed += step_perc
             frame += 1
             frame = 0 if frame == 4 else frame
-            ui.update_progess(completed, step_perc, '{}% {}/{}'.format(int(completed), n + 1, file_count), chr(anim[frame]))     
+            update_progess(completed, step_perc, '{}% {}/{}'.format(int(completed), n + 1, file_count), chr(anim[frame]))     
 
-        ui.update_progess(100, step_perc, '100% {}/{}, done.'.format(n + 1, file_count), chr(anim[frame]))
+        update_progess(100, step_perc, '100% {}/{}, done.'.format(n + 1, file_count), chr(anim[frame]))
         print('')
 
         if failed:
-            ui.print_failed(failed)
+            print_failed(failed)
 
         if args.list_dir:
-            ui.list_dir(target_dir)
+            list_dir(target_dir)
 
 
 if __name__ == '__main__':

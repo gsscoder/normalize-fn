@@ -1,3 +1,4 @@
+
 from __future__ import print_function
 import sys
 if sys.version_info.major == 2:
@@ -5,10 +6,8 @@ if sys.version_info.major == 2:
 import os
 
 import shell
-import scheme
-
-
-SCRIPT_NAME = 'normalizefn.py'
+from scheme import save_scheme
+from common import SCRIPT_NAME, die
 
 
 def print_preview(normalized):
@@ -44,7 +43,7 @@ def confirm(target_dir, rename_scheme):
     if len(proceed) == 1 and proceed == 'y':
         return (True, None)
     elif len(proceed) == 1 and proceed == 'e':
-        temp_file = scheme.save(rename_scheme)
+        temp_file = save_scheme(rename_scheme)
         if (not temp_file):
             die('Can\'t create the temporary file.')
         if not _open_editor(temp_file):
@@ -98,18 +97,15 @@ def exit_and_hints(target_dir, args):
     die(message)
 
 
-def die(message):
-    print('{}: {}'.format(SCRIPT_NAME, message))
-    sys.exit(1)
-
-
 def _shorten(filename):
     if len(filename) >= 30:
         return '{}...{}'.format(filename[:15], filename[len(filename)-15:])
     return filename
-    
+
+
 def _better_ui():
     return shell.is_a_tty() and sys.version_info.major >= 3
+
 
 def _open_editor(filename):
     if sys.version_info.major > 2:

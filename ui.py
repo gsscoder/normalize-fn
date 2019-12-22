@@ -8,7 +8,7 @@ import os
 import shell
 from scheme import save_scheme
 from common import SCRIPT_NAME, die
-from acronyms import EXTRA_FILENAME
+from acronyms import ACRONYMS_FILENAME
 
 
 def print_preview(normalized):
@@ -91,7 +91,7 @@ def update_progess(actual, step, perc_text, anim_frame):
 def exit_and_hints(target_dir, args):
     message = ('{}: {}: Contains no filenames to normalize\n'
                'Try to edit \'{}\'.'
-               .format(SCRIPT_NAME, target_dir, EXTRA_FILENAME))
+               .format(SCRIPT_NAME, target_dir, ACRONYMS_FILENAME))
     if not args.remove_langs:
         message += '\nPlease try with --remove-langs option.'
     if not args.remove_noise:

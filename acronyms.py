@@ -2,7 +2,7 @@ import os
 import json
 
 
-EXTRA_FILENAME = "extra.json"
+EXTRA_FILENAME = "acronyms.json"
 
 RE_COMMON = (
     'CAM|TS|TC|DV|MiniDV|R3|R4|R5|R6|VHSSCR|DVDSCR|DVDRip|Mux|DVDMux|'
